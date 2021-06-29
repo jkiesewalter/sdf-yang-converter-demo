@@ -23,7 +23,7 @@ def sdfToYang
     f.write(@sdf)
     f.close
     if validateSdf("test.sdf.json").blank?
-      `../converter -f test.sdf.json -o result.yang -c ../`
+      `./converter -f test.sdf.json -o result.yang`
       @yang = File.read("result.yang") if File.exist?("result.yang")
       File.delete("result.yang") if File.exist?("result.yang")
     else
@@ -45,8 +45,8 @@ def yangToSdf
       f.write(@yang)
       f.close
       if validateYang(fname).blank?
-        `../converter -f #{fname} -o test_out.sdf.json -c ../`
-        @sdf = File.read("test_out.sdf.json")
+        `./converter -f #{fname} -o test_out.sdf.json`
+        @sdf = File.read("test_out.sdf.json") if File.exist?("test_out.sdf.json")
         File.delete("test_out.sdf.json") if File.exist?("test_out.sdf.json")
       else
         @error = "Invalid input: " + validateYang(fname)
@@ -145,16 +145,16 @@ form method="POST"
          = " "
     tr
       td
-         textarea#sdf name="sdf" placeholder="Enter a YANG module here" autofocus="autofocus"
+         textarea#sdf name="sdf" placeholder="Enter a SDF model here (must not import from other models)" autofocus="autofocus"
            = @sdf
       td
-         textarea#yang name="yang" placeholder="Enter an SDF file here" autofocus="autofocus"
+         textarea#yang name="yang" placeholder="Enter an YANG module here (can only import modules from the YANG GitHub repository)" autofocus="autofocus"
            = @yang
 
 
 @@styles
-$purple:#639;
-$green:#396;
+$purple:#007fff;
+$green:#ff8000;
 body{ font: 13pt/1.4 arial, sans-serif; }
 header{ overflow: hidden; }
 #right{float:right; font: 9pt/1 palatino;}
@@ -162,11 +162,11 @@ header{ overflow: hidden; }
 .logo a{ color: $purple; font: 48pt/1 palatino; text-decoration: none; &:hover{color:$green;}}
 .title{ color: $green; font: 32pt/1 palatino; }
 .button {text-decoration: none; font-weight: bold; padding: 4px 8px; border-radius: 10px; background: $green; color: white; border:none; &:hover{background:$purple;}}
-.warning {color: #ff0099;}
+.warning {color: #ff8000;}
 header .button{ float:left; margin: 36px 10px 0;}
 form label {display: block;}
 form select {display: block;}
 td {width: 45%;}
 table {width: 100%; }
 textarea {width: 100%;}
-textarea {min-height: 400px; }
+textarea {min-height: 700px; }
