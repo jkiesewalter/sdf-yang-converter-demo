@@ -171,4 +171,4 @@ form select {display: block;}
 td {width: 45%;}
 table {width: 100%; }
 textarea {width: 100%;}
-textarea {min-height: 550px; }
+textarea {min-height: 700px; }
