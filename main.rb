@@ -115,7 +115,9 @@ html lang="en"
     link rel="stylesheet" href="/css/styles.css"
   body
     #right
-      | SDF YANG converter playground.  See
+      | SDF YANG converter playground.
+      a<> href="mailto:sdfyangconverter@gmail.com" Feedback
+      | on conversion results is greatly appreciated.<br><br>See
       a<> href="https://www.ietf.org/archive/id/draft-ietf-asdf-sdf-06.html" draft-ietf-asdf-sdf-06
       | for the SDF specification, 
       a<> href="https://tools.ietf.org/html/rfc7950" RFC 7950
@@ -157,7 +159,7 @@ $purple:#007fff;
 $green:#ff8000;
 body{ font: 13pt/1.4 arial, sans-serif; }
 header{ overflow: hidden; }
-#right{float:right; font: 9pt/1 palatino;}
+#right{float:right; font: 9pt/1 palatino; text-align:right}
 .logo{float:left;overflow: hidden; }
 .logo a{ color: $purple; font: 48pt/1 palatino; text-decoration: none; &:hover{color:$green;}}
 .title{ color: $green; font: 32pt/1 palatino; }
@@ -169,4 +171,4 @@ form select {display: block;}
 td {width: 45%;}
 table {width: 100%; }
 textarea {width: 100%;}
-textarea {min-height: 700px; }
+textarea {min-height: 550px; }
