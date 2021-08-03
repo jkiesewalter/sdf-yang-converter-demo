@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'slim'
 require 'open3'
-
 require 'treetop'
 
 get('/css/styles.css'){ scss :styles }
@@ -75,6 +74,18 @@ def validateSdf (path)
   end
 end
 
+def loadSdfExample
+  puts 'Loading ' + @sdfexmpl
+  @sdf = File.read(@sdfexmpl) if File.exist?(@sdfexmpl)
+end
+
+def loadYangExample
+  if @yangexmpl != 'choose an example'
+    puts 'Loading ' + @yangexmpl
+    @yang = File.read(@yangexmpl) if File.exist?(@yangexmpl)
+  end
+end
+
 get '/' do
   @sdf = params[:sdf]
   @yang = params[:yang]
@@ -93,16 +104,24 @@ end
 post '/' do
   @sdf = params[:sdf]
   @yang = params[:yang]
+  @sdfexmpl = params[:sdfexmpl]
+  @yangexmpl = params[:yangexmpl]
   if params[:sdftoyang]
     sdfToYang
   else
-    yangToSdf
+    if params[:yangtosdf]
+      yangToSdf
+    else
+      if params[:submitsdfexmpl]
+        loadSdfExample
+      else
+        if params[:submityangexmpl]
+          loadYangExample
+        end
+      end
+    end
   end
   slim :index
-end
-
-get '/yangtosdf' do
-  puts "!!!!!!"
 end
 
 __END__
@@ -115,15 +134,16 @@ html lang="en"
     link rel="stylesheet" href="/css/styles.css"
   body
     #right
-      | SDF YANG converter playground.
+      | SDF YANG converter playground. 
       a<> href="mailto:sdfyangconverter@gmail.com" Feedback
-      | on conversion results is greatly appreciated.<br><br>See
-      a<> href="https://www.ietf.org/archive/id/draft-ietf-asdf-sdf-06.html" draft-ietf-asdf-sdf-06
+      | on conversion results is greatly appreciated.<br><br> See
+      a<> href="https://www.ietf.org/archive/id/draft-ietf-asdf-sdf-07.html" draft-ietf-asdf-sdf-07
       | for the SDF specification, 
       a<> href="https://tools.ietf.org/html/rfc7950" RFC 7950
-      | for the YANG specification, and
-      a<> href="https://github.com/jkiesewalter/sdf-yang-converter" GitHub
-      | for more background information on the converter.
+      | for the YANG specification,<br>
+      a<> href="https://www.ietf.org/archive/id/draft-kiesewalter-asdf-yang-sdf-00.html" draft-kiesewalter-asdf-yang-sdf-00
+      | for mapping details.<br><br>Get the converter as a command line tool on
+      a<> href="https://github.com/jkiesewalter/sdf-yang-converter" GitHub.
       end
     header role="banner"
       h1.logo
@@ -139,12 +159,26 @@ form method="POST"
   table
     tr
       td
-         a SDF
-         input.button name="sdftoyang" type="submit" value="→" accesskey="]" title="Convert to SDF (accesskey ])"
+         a SDF 
+         input.button name="sdftoyang" type="submit" value="Convert to YANG →" accesskey="]" title="Convert to SDF"
       td
-         input.button name="yangtosdf" type="submit" value="←" accesskey="[" title="Convert to YANG (accesskey [)"
-         a YANG
+         input.button name="yangtosdf" type="submit" value="← Convert to SDF" accesskey="[" title="Convert to YANG"
+         a  YANG
          = " "
+    tr
+      td
+        select name="sdfexmpl" type="select" title="Show SDF examples"
+          option select an example
+          option sdfobject-alarm.sdf.json
+          option sdfobject-batterymaterial.sdf.json
+        input.button name="submitsdfexmpl" type="submit" value="Load example ↓" title="Submit selection"
+      td
+        select name="yangexmpl" type="select" title="Show YANG examples"
+          option select an example
+          option ietf-alarms@2019-09-11.yang
+          option ietf-access-control-list@2019-03-04.yang
+          option ietf-system@2014-08-06.yang
+        input.button name="submityangexmpl" type="submit" value="↓ Load example" title="Submit selection"
     tr
       td
          textarea#sdf name="sdf" placeholder="Enter a SDF model here (must not import from other models)" autofocus="autofocus"
@@ -159,7 +193,7 @@ $purple:#007fff;
 $green:#ff8000;
 body{ font: 13pt/1.4 arial, sans-serif; }
 header{ overflow: hidden; }
-#right{float:right; font: 9pt/1 palatino; text-align:right}
+#right{float:right; font: 9pt/1 palatino;}
 .logo{float:left;overflow: hidden; }
 .logo a{ color: $purple; font: 48pt/1 palatino; text-decoration: none; &:hover{color:$green;}}
 .title{ color: $green; font: 32pt/1 palatino; }
@@ -171,4 +205,4 @@ form select {display: block;}
 td {width: 45%;}
 table {width: 100%; }
 textarea {width: 100%;}
-textarea {min-height: 700px; }
+textarea {min-height: 600px; }
