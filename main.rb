@@ -167,13 +167,13 @@ form method="POST"
          = " "
     tr
       td
-        select name="sdfexmpl" type="select" title="Show SDF examples"
+        select.r-margin name="sdfexmpl" type="select" title="Show SDF examples"
           option select an example
           option sdfobject-alarm.sdf.json
           option sdfobject-batterymaterial.sdf.json
         input.button name="submitsdfexmpl" type="submit" value="Load example ↓" title="Submit selection"
       td
-        select name="yangexmpl" type="select" title="Show YANG examples"
+        select.r-margin name="yangexmpl" type="select" title="Show YANG examples"
           option select an example
           option ietf-alarms@2019-09-11.yang
           option ietf-access-control-list@2019-03-04.yang
@@ -199,10 +199,12 @@ header{ overflow: hidden; }
 .title{ color: $green; font: 32pt/1 palatino; }
 .button {text-decoration: none; font-weight: bold; padding: 4px 8px; border-radius: 10px; background: $green; color: white; border:none; &:hover{background:$purple;}}
 .warning {color: #ff8000;}
+select {text-decoration: none;}
 header .button{ float:left; margin: 36px 10px 0;}
-form label {display: block;}
-form select {display: block;}
 td {width: 45%;}
-table {width: 100%; }
-textarea {width: 100%;}
-textarea {min-height: 600px; }
+table {width: 100%;}
+textarea {width: 100%; min-height: 70vh;}
+.r-align {text-align: right;}
+.l-align {text-align: left;}
+.r-margin {margin-right: 10px}
+.l-margin {margin-left: 10px}
